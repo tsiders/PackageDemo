@@ -21,38 +21,20 @@ public class PersonController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreatePerson([FromBody] PersonDto personDto)
     {
-        var result = await _dbContext.CreateEntity(personDto, p =>
-        {
-            return new Person()
-            {
-                Id = null,
-                Name = p.Name
-            };
-        });
-
-        personDto.Id = result.Id;
+        var result = await _dbContext.CreateEntity(personDto, Person.CreateFromPersonDto);
         
-        return Ok(personDto);
+        return Ok(PersonDto.CreateFromEntity(result));
     }
 
     [HttpGet("search")]
     public async Task<IActionResult> SearchPeople([FromQuery] Page page, [FromQuery] PersonFilter filter,
         [FromQuery] string[]? includes = null)
     {
-        var result = await _dbContext.SearchAsync<Person, PersonDto, PersonFilter>(new PageAndFilter<PersonFilter>(page, filter), 
-            (p) => new PersonDto
-        {
-            Id = p.Id,
-            Name = p.Name
-        }, (f, q) =>
-        {
-            if (!string.IsNullOrEmpty(f.Name))
-            {
-                q = q.Where(p => p.Name.ToLower().Contains(f.Name));
-            }
-            
-            return q;
-        }, includes);
+        var result = await _dbContext.SearchAsync<Person, PersonDto, PersonFilter>(
+            new PageAndFilter<PersonFilter>(page, filter), 
+            PersonDto.CreateFromEntity, 
+            PersonFilter.ApplyFilter, 
+            includes);
 
         return Ok(result);
     }
