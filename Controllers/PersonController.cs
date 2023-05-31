@@ -23,6 +23,8 @@ public class PersonController : ControllerBase
     {
         var result = await _dbContext.CreateEntity(personDto, Person.CreateFromPersonDto);
         
+        // var result = await _dbContext.CreateEntity(personDto, async (dto) => await Person.CreateFromPersonDtoAsync(dto));
+        
         return Ok(PersonDto.CreateFromEntity(result));
     }
 
