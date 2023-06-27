@@ -1,10 +1,11 @@
-using DbContextCRUDExtensions.Dtos;
 using PackageDemo.Entities;
 
 namespace PackageDemo.Dtos;
 
-public class PersonDto : BaseDto
+public class PersonDto
 {
+    public int? Id { get; set; }
+    
     public string? Name { get; set; }
 
     public PersonDto()

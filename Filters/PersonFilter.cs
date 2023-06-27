@@ -3,7 +3,7 @@ using PackageDemo.Entities;
 
 namespace PackageDemo.Filters;
 
-public class PersonFilter : BaseFilter
+public class PersonFilter
 {
     public string? Name { get; set; }
     

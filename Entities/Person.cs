@@ -1,11 +1,14 @@
 using System.ComponentModel.DataAnnotations;
-using DbContextCRUDExtensions.Entities;
 using PackageDemo.Dtos;
 
 namespace PackageDemo.Entities;
 
-public class Person : BaseEntity
+public class Person
 {
+    [Required]
+    [Key]
+    public int? Id { get; set; }
+    
     [Required]
     public string? Name { get; set; }
 
