@@ -21,7 +21,7 @@ public class PersonController : ControllerBase
     [HttpPost("async")]
     public async Task<IActionResult> CreatePersonAsync([FromBody] PersonDto personDto)
     {
-        var result =  await _dbContext.CreateEntityAsync(personDto, Person.CreateFromPersonDto);
+        var result =  await _dbContext.CreateEntityAsync(personDto, Person.CreateFromPersonDto, true);
 
         return Ok(PersonDto.CreateFromEntity(result));
     }
@@ -29,7 +29,7 @@ public class PersonController : ControllerBase
     [HttpPost("async-conversion")]
     public async Task<IActionResult> CreatePersonAsyncConversion([FromBody] PersonDto personDto)
     {
-        var result = await _dbContext.CreateEntity(personDto, async (dto) => await Person.CreateFromPersonDtoAsync(dto));
+        var result = await _dbContext.CreateEntityAsync(personDto, async (dto) => await Person.CreateFromPersonDtoAsync(dto), true);
         
         return Ok(PersonDto.CreateFromEntity(result));
     }
@@ -37,7 +37,7 @@ public class PersonController : ControllerBase
     [HttpPost]
     public IActionResult CreatePerson([FromBody] PersonDto personDto)
     {
-        var result =  _dbContext.CreateEntity(personDto, Person.CreateFromPersonDto);
+        var result =  _dbContext.CreateEntity(personDto, Person.CreateFromPersonDto, true);
 
         return Ok(PersonDto.CreateFromEntity(result));
     }
